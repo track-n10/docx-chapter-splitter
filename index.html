@@ -572,4 +572,356 @@ Tips:
                     }
                 }
                 
-             
+                // If no automatic detection or failed, return entire document as one chapter
+                const fallbackChapters = [{
+                    title: chapterTitles[0] || 'Complete Document',
+                    content: html,
+                    originalIndex: 0
+                }];
+                fallbackChapters.detectionMethod = 'Fallback: Using entire document as single chapter';
+                return fallbackChapters;
+            }
+        }
+        
+        function findChapterBreaks(html, chapterTitles) {
+            const breaks = [];
+            const lowercaseHtml = html.toLowerCase();
+            
+            // Try to find each chapter title in the HTML
+            chapterTitles.forEach((title, index) => {
+                const searchPatterns = generateSearchPatterns(title);
+                
+                for (const pattern of searchPatterns) {
+                    const regex = new RegExp(pattern, 'gi');
+                    let match;
+                    
+                    while ((match = regex.exec(html)) !== null) {
+                        // Check if this is likely a heading (not just text in paragraph)
+                        const beforeText = html.substring(Math.max(0, match.index - 100), match.index);
+                        const afterText = html.substring(match.index + match[0].length, Math.min(html.length, match.index + match[0].length + 100));
+                        
+                        // Look for heading patterns or structural elements
+                        if (isLikelyHeading(beforeText, afterText, match[0])) {
+                            breaks.push({
+                                index: match.index,
+                                title: title,
+                                foundText: match[0],
+                                chapterIndex: index
+                            });
+                            break; // Found this chapter, move to next
+                        }
+                    }
+                }
+            });
+            
+            // Sort by position in document
+            breaks.sort((a, b) => a.index - b.index);
+            
+            // Remove duplicates (keep first occurrence)
+            const uniqueBreaks = [];
+            const seenTitles = new Set();
+            
+            for (const brk of breaks) {
+                if (!seenTitles.has(brk.title)) {
+                    uniqueBreaks.push(brk);
+                    seenTitles.add(brk.title);
+                }
+            }
+            
+            return uniqueBreaks;
+        }
+        
+        function generateSearchPatterns(title) {
+            const patterns = [];
+            const cleanTitle = title.trim();
+            
+            // Exact match with word boundaries
+            patterns.push(`\\b${escapeRegex(cleanTitle)}\\b`);
+            
+            // Without punctuation
+            const noPunct = cleanTitle.replace(/[^\w\s]/g, '').trim();
+            if (noPunct !== cleanTitle) {
+                patterns.push(`\\b${escapeRegex(noPunct)}\\b`);
+            }
+            
+            // Try with different case patterns
+            patterns.push(`\\b${escapeRegex(cleanTitle.toUpperCase())}\\b`);
+            patterns.push(`\\b${escapeRegex(cleanTitle.toLowerCase())}\\b`);
+            
+            // Try without "Chapter" word if present
+            const withoutChapter = cleanTitle.replace(/^chapter\s*/i, '').trim();
+            if (withoutChapter !== cleanTitle) {
+                patterns.push(`\\b${escapeRegex(withoutChapter)}\\b`);
+            }
+            
+            return patterns;
+        }
+        
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+        
+        function isLikelyHeading(beforeText, afterText, matchText) {
+            // Check for HTML heading tags
+            if (/<h[1-6][^>]*>.*$/i.test(beforeText) && /^.*<\/h[1-6]>/i.test(afterText)) {
+                return true;
+            }
+            
+            // Check for paragraph with strong emphasis
+            if (/<p[^>]*><strong[^>]*>.*$/i.test(beforeText) && /^.*<\/strong><\/p>/i.test(afterText)) {
+                return true;
+            }
+            
+            // Check for bold text
+            if (/<b[^>]*>.*$/i.test(beforeText) && /^.*<\/b>/i.test(afterText)) {
+                return true;
+            }
+            
+            // Check if text is at beginning of paragraph
+            if (/<p[^>]*>.*$/i.test(beforeText)) {
+                const afterMatch = afterText.substring(0, 50);
+                // If followed by paragraph end or line break, likely a heading
+                if (/<\/p>|<br\s*\/?>/i.test(afterMatch)) {
+                    return true;
+                }
+            }
+            
+            // Check for surrounding whitespace patterns (indicating standalone text)
+            const textBefore = beforeText.replace(/<[^>]*>/g, '').trim();
+            const textAfter = afterText.replace(/<[^>]*>/g, '').trim();
+            
+            if (textBefore.length === 0 || textBefore.endsWith('\n') || textBefore.endsWith('.')) {
+                if (textAfter.length === 0 || textAfter.startsWith('\n') || /^[\s\n]/.test(textAfter)) {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        function splitByBreaks(html, chapterTitles, breaks) {
+            const chapters = [];
+            
+            if (breaks.length === 0) {
+                return [{
+                    title: 'Complete Document',
+                    content: html,
+                    originalIndex: 0
+                }];
+            }
+            
+            // Add the first section (before first chapter)
+            if (breaks[0].index > 0) {
+                const beforeContent = html.substring(0, breaks[0].index).trim();
+                if (beforeContent.length > 100) { // Only add if substantial content
+                    chapters.push({
+                        title: 'Introduction/Preface',
+                        content: beforeContent,
+                        originalIndex: -1
+                    });
+                }
+            }
+            
+            // Split between chapter breaks
+            for (let i = 0; i < breaks.length; i++) {
+                const currentBreak = breaks[i];
+                const nextBreak = breaks[i + 1];
+                
+                const startIndex = currentBreak.index;
+                const endIndex = nextBreak ? nextBreak.index : html.length;
+                
+                const chapterContent = html.substring(startIndex, endIndex).trim();
+                
+                if (chapterContent.length > 50) { // Only add chapters with substantial content
+                    chapters.push({
+                        title: currentBreak.title,
+                        content: chapterContent,
+                        originalIndex: currentBreak.chapterIndex,
+                        foundText: currentBreak.foundText
+                    });
+                }
+            }
+            
+            return chapters;
+        }
+        
+        function tryAutomaticDetection(html, expectedChapterCount) {
+            console.log('Attempting automatic chapter detection...');
+            
+            // Try to find patterns that might indicate chapters
+            const headingPatterns = [
+                /<h[1-3][^>]*>([^<]+)<\/h[1-3]>/gi,
+                /<p[^>]*><strong[^>]*>([^<]+)<\/strong><\/p>/gi,
+                /<p[^>]*><b[^>]*>([^<]+)<\/b><\/p>/gi
+            ];
+            
+            const potentialChapters = [];
+            
+            for (const pattern of headingPatterns) {
+                let match;
+                while ((match = pattern.exec(html)) !== null) {
+                    const title = match[1].trim();
+                    
+                    // Filter out likely non-chapter headings
+                    if (title.length > 3 && title.length < 100 && 
+                        !title.toLowerCase().includes('table of contents') &&
+                        !title.toLowerCase().includes('index') &&
+                        !/^\d+$/.test(title)) { // Not just a number
+                        
+                        potentialChapters.push({
+                            title: title,
+                            index: match.index,
+                            fullMatch: match[0]
+                        });
+                    }
+                }
+            }
+            
+            // Remove duplicates and sort
+            const uniqueChapters = [];
+            const seenTitles = new Set();
+            
+            for (const chapter of potentialChapters) {
+                if (!seenTitles.has(chapter.title.toLowerCase())) {
+                    uniqueChapters.push(chapter);
+                    seenTitles.add(chapter.title.toLowerCase());
+                }
+            }
+            
+            uniqueChapters.sort((a, b) => a.index - b.index);
+            
+            console.log('Found potential chapters:', uniqueChapters);
+            
+            // If we found a reasonable number of chapters, use them
+            if (uniqueChapters.length >= 2 && uniqueChapters.length <= expectedChapterCount * 2) {
+                return splitByAutomaticBreaks(html, uniqueChapters);
+            }
+            
+            return null;
+        }
+        
+        function splitByAutomaticBreaks(html, chapters) {
+            const result = [];
+            
+            for (let i = 0; i < chapters.length; i++) {
+                const current = chapters[i];
+                const next = chapters[i + 1];
+                
+                const startIndex = current.index;
+                const endIndex = next ? next.index : html.length;
+                
+                const content = html.substring(startIndex, endIndex).trim();
+                
+                if (content.length > 100) {
+                    result.push({
+                        title: current.title,
+                        content: content,
+                        originalIndex: i
+                    });
+                }
+            }
+            
+            return result;
+        }
+        
+        function showDebugInfo(chapters, originalTitles) {
+            const debugDiv = document.getElementById('debug-info');
+            let debugText = `Original titles provided: ${originalTitles.length}\n`;
+            debugText += `Chapters created: ${chapters.length}\n`;
+            debugText += `Detection method: ${chapters.detectionMethod || 'Unknown'}\n\n`;
+            
+            debugText += 'Chapter breakdown:\n';
+            chapters.forEach((chapter, index) => {
+                debugText += `${index + 1}. "${chapter.title}" (${chapter.content.length} chars)\n`;
+                if (chapter.foundText) {
+                    debugText += `   Found as: "${chapter.foundText}"\n`;
+                }
+            });
+            
+            debugText += '\nOriginal titles:\n';
+            originalTitles.forEach((title, index) => {
+                debugText += `${index + 1}. "${title}"\n`;
+            });
+            
+            debugDiv.textContent = debugText;
+        }
+        
+        function renderChapters(chapters) {
+            const chapterList = document.getElementById('chapter-list');
+            chapterList.innerHTML = '';
+            
+            chapters.forEach((chapter, index) => {
+                const chapterCard = document.createElement('div');
+                chapterCard.className = 'chapter-card';
+                
+                // Truncate content for preview
+                const contentPreview = chapter.content.length > 500 
+                    ? chapter.content.substring(0, 500) + '...' 
+                    : chapter.content;
+                
+                chapterCard.innerHTML = `
+                    <div class="chapter-header">
+                        <h3 class="chapter-title">${escapeHtml(chapter.title)}</h3>
+                        <div class="chapter-number">${index + 1}</div>
+                    </div>
+                    <div class="chapter-content">
+                        ${contentPreview}
+                    </div>
+                    <div class="chapter-actions">
+                        <button class="btn btn-success" onclick="copyChapter(${index})">
+                            <i class="fas fa-copy"></i> Copy HTML
+                        </button>
+                        <button class="btn" onclick="downloadChapter(${index})">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                `;
+                
+                chapterList.appendChild(chapterCard);
+            });
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function copyChapter(index) {
+            const chapter = processedChapters[index];
+            if (chapter) {
+                navigator.clipboard.writeText(chapter.content).then(() => {
+                    showCopyAlert();
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = chapter.content;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showCopyAlert();
+                });
+            }
+        }
+        
+        function downloadChapter(index) {
+            const chapter = processedChapters[index];
+            if (chapter) {
+                const blob = new Blob([chapter.content], { type: 'text/html;charset=utf-8' });
+                const filename = `${chapter.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.html`;
+                saveAs(blob, filename);
+            }
+        }
+        
+        function showCopyAlert() {
+            const alert = document.getElementById('copy-alert');
+            alert.classList.add('show');
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
