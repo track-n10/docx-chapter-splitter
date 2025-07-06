@@ -303,13 +303,91 @@
             transform: translateX(0);
         }
         
+        .social-section {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .social-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+        
+        .social-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: #b0bec5;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-link:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .social-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .social-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+        
+        .instagram { color: #E4405F; }
+        .tiktok { color: #fe2c55; }
+        .youtube { color: #FF0000; }
+        .spotify { color: #1DB954; }
+        .patreon { color: #FF424D; }
+        .substack { color: #FF6719; }
+        
         footer {
             text-align: center;
             padding: 2rem 0 1rem;
             color: var(--gray);
             font-size: 0.95rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .footer-highlight {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 1rem;
         }
         
         @media (max-width: 768px) {
@@ -319,6 +397,28 @@
             
             .container {
                 padding: 10px;
+            }
+            
+            .social-links {
+                gap: 15px;
+            }
+            
+            .social-link {
+                min-width: 100px;
+                padding: 15px;
+            }
+            
+            .social-icon {
+                font-size: 2rem;
+            }
+            
+            .social-title {
+                font-size: 1.5rem;
+            }
+            
+            .social-subtitle {
+                font-size: 1rem;
+                padding: 0 10px;
             }
         }
     </style>
@@ -410,7 +510,47 @@ Tips:
         <i class="fas fa-check-circle"></i> Content copied to clipboard!
     </div>
     
+    <div class="social-section container">
+        <h2 class="social-title">Support the Project</h2>
+        <p class="social-subtitle">
+            Follow me on social media to support this project and discover other creative tools for independent artists!
+        </p>
+        
+        <div class="social-links">
+            <a href="https://www.instagram.com/track_n10" target="_blank" rel="noopener noreferrer" class="social-link">
+                <i class="fab fa-instagram social-icon instagram"></i>
+                <span class="social-name">Instagram</span>
+            </a>
+            
+            <a href="https://www.tiktok.com/@track_n10?_t=ZM-8xkg80gGGZi&_r=1" target="_blank" rel="noopener noreferrer" class="social-link">
+                <i class="fab fa-tiktok social-icon tiktok"></i>
+                <span class="social-name">TikTok</span>
+            </a>
+            
+            <a href="https://youtube.com/@track_n10?si=X728VaNUd1ehwmdF" target="_blank" rel="noopener noreferrer" class="social-link">
+                <i class="fab fa-youtube social-icon youtube"></i>
+                <span class="social-name">YouTube</span>
+            </a>
+            
+            <a href="https://open.spotify.com/artist/5zh2act5rl2vMBH7UJ8ndy?si=sdUoZ4e8RHO_F9RwZKIq8w" target="_blank" rel="noopener noreferrer" class="social-link">
+                <i class="fab fa-spotify social-icon spotify"></i>
+                <span class="social-name">Spotify</span>
+            </a>
+            
+            <a href="https://patreon.com/TRACK_N10?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" rel="noopener noreferrer" class="social-link">
+                <i class="fab fa-patreon social-icon patreon"></i>
+                <span class="social-name">Patreon</span>
+            </a>
+            
+            <a href="https://substack.com/@trackn10?utm_source=share&utm_medium=android&r=5zj4bj" target="_blank" rel="noopener noreferrer" class="social-link">
+                <i class="fas fa-newspaper social-icon substack"></i>
+                <span class="social-name">Substack</span>
+            </a>
+        </div>
+    </div>
+    
     <footer class="container">
+        <p class="footer-highlight">Created by TRACK_N10 aka Leonardo Sales Santos for independent artists</p>
         <p>DOCX Chapter Splitter - Client-Side Version | Your documents are processed locally and never uploaded to any server</p>
     </footer>
 
@@ -1080,7 +1220,47 @@ Tips:
         ${chapterNumber < processedChapters.length ? `<a href="${String(chapterNumber + 1).padStart(2, '0')}_${sanitizeFilename(processedChapters[chapterNumber].title)}.html" class="nav-button">Próximo →</a>` : ''}
     </div>
     
+    <div style="text-align: center; padding: 3rem 0 2rem; margin-top: 2rem; border-top: 1px solid #eee;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: #4361ee; font-weight: 600;">Support the Project</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #666; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+            Follow me on social media to support this project and discover other creative tools for independent artists!
+        </p>
+        
+        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 2rem;">
+            <a href="https://www.instagram.com/track_n10" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-instagram" style="font-size: 2.5rem; margin-bottom: 10px; color: #E4405F;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">Instagram</span>
+            </a>
+            
+            <a href="https://www.tiktok.com/@track_n10?_t=ZM-8xkg80gGGZi&_r=1" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-tiktok" style="font-size: 2.5rem; margin-bottom: 10px; color: #fe2c55;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">TikTok</span>
+            </a>
+            
+            <a href="https://youtube.com/@track_n10?si=X728VaNUd1ehwmdF" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-youtube" style="font-size: 2.5rem; margin-bottom: 10px; color: #FF0000;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">YouTube</span>
+            </a>
+            
+            <a href="https://open.spotify.com/artist/5zh2act5rl2vMBH7UJ8ndy?si=sdUoZ4e8RHO_F9RwZKIq8w" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-spotify" style="font-size: 2.5rem; margin-bottom: 10px; color: #1DB954;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">Spotify</span>
+            </a>
+            
+            <a href="https://patreon.com/TRACK_N10?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-patreon" style="font-size: 2.5rem; margin-bottom: 10px; color: #FF424D;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">Patreon</span>
+            </a>
+            
+            <a href="https://substack.com/@trackn10?utm_source=share&utm_medium=android&r=5zj4bj" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fas fa-newspaper" style="font-size: 2.5rem; margin-bottom: 10px; color: #FF6719;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">Substack</span>
+            </a>
+        </div>
+    </div>
+    
     <footer style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
+        <p style="font-size: 1.1rem; font-weight: 600; color: #4361ee; margin-bottom: 1rem;">Created by TRACK_N10 aka Leonardo Sales Santos for independent artists</p>
         <p>Processado pelo DOCX Chapter Splitter - ${new Date().toLocaleDateString('pt-BR')}</p>
     </footer>
 </body>
@@ -1103,13 +1283,14 @@ Tips:
                 `;
             }).join('');
             
-                         return `<!DOCTYPE html>
- <html lang="pt-BR">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Índice de Capítulos</title>
-     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48cGF0aCBmaWxsPSIjNDM2MWVlIiBkPSJNMjQ5LjYgNDcuNjc4bC0yMDgtMjJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OHptMTEyIDMyYy03LjMwNS0uNzczLTEzLjcwNSA0LjM0MS0xNC40NzggMTEuNjQ2bC0xMCA5NWMtLjc3MyA3LjMwNSA0LjM0MSAxMy43MDUgMTEuNjQ2IDE0LjQ3OGwyMDggMjJjNy4zMDUuNzczIDEzLjcwNS00LjM0MSAxNC40NzgtMTEuNjQ2bDEwLTk1Yy43NzMtNy4zMDUtNC4zNDEtMTMuNzA1LTExLjY0Ni0xNC40NzhsLTIwOC0yMnptLTExMiAyMDBjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyem0xMTIgMzJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyeiIvPjwvc3ZnPg==">
+                                      return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Índice de Capítulos</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48cGF0aCBmaWxsPSIjNDM2MWVlIiBkPSJNMjQ5LjYgNDcuNjc4bC0yMDgtMjJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OHptMTEyIDMyYy03LjMwNS0uNzczLTEzLjcwNSA0LjM0MS0xNC40NzggMTEuNjQ2bC0xMCA5NWMtLjc3MyA3LjMwNSA0LjM0MSAxMy43MDUgMTEuNjQ2IDE0LjQ3OGwyMDggMjJjNy4zMDUuNzczIDEzLjcwNS00LjM0MSAxNC40NzgtMTEuNjQ2bDEwLTk1Yy43NzMtNy4zMDUtNC4zNDEtMTMuNzA1LTExLjY0Ni0xNC40NzhsLTIwOC0yMnptLTExMiAyMDBjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyem0xMTIgMzJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyeiIvPjwvc3ZnPg==">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1249,7 +1430,47 @@ Tips:
         ${chapterList}
     </div>
     
+    <div style="text-align: center; padding: 3rem 0 2rem; margin-top: 2rem; border-top: 1px solid #ddd;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: #4361ee; font-weight: 600;">Support the Project</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #666; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+            Follow me on social media to support this project and discover other creative tools for independent artists!
+        </p>
+        
+        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 2rem;">
+            <a href="https://www.instagram.com/track_n10" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-instagram" style="font-size: 2.5rem; margin-bottom: 10px; color: #E4405F;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">Instagram</span>
+            </a>
+            
+            <a href="https://www.tiktok.com/@track_n10?_t=ZM-8xkg80gGGZi&_r=1" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-tiktok" style="font-size: 2.5rem; margin-bottom: 10px; color: #fe2c55;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">TikTok</span>
+            </a>
+            
+            <a href="https://youtube.com/@track_n10?si=X728VaNUd1ehwmdF" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-youtube" style="font-size: 2.5rem; margin-bottom: 10px; color: #FF0000;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">YouTube</span>
+            </a>
+            
+            <a href="https://open.spotify.com/artist/5zh2act5rl2vMBH7UJ8ndy?si=sdUoZ4e8RHO_F9RwZKIq8w" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-spotify" style="font-size: 2.5rem; margin-bottom: 10px; color: #1DB954;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">Spotify</span>
+            </a>
+            
+            <a href="https://patreon.com/TRACK_N10?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fab fa-patreon" style="font-size: 2.5rem; margin-bottom: 10px; color: #FF424D;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">Patreon</span>
+            </a>
+            
+            <a href="https://substack.com/@trackn10?utm_source=share&utm_medium=android&r=5zj4bj" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 15px; text-decoration: none; color: #333; transition: all 0.3s ease; min-width: 120px;">
+                <i class="fas fa-newspaper" style="font-size: 2.5rem; margin-bottom: 10px; color: #FF6719;"></i>
+                <span style="font-size: 0.9rem; font-weight: 600;">Substack</span>
+            </a>
+        </div>
+    </div>
+    
     <div class="footer">
+        <p style="font-size: 1.1rem; font-weight: 600; color: #4361ee; margin-bottom: 1rem;">Created by TRACK_N10 aka Leonardo Sales Santos for independent artists</p>
         <p>Processado pelo DOCX Chapter Splitter em ${new Date().toLocaleDateString('pt-BR')}</p>
         <p>Clique nos títulos dos capítulos para navegar</p>
     </div>
