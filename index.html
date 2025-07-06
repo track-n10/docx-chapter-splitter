@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOCX Chapter Splitter - Client-Side Version</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48cGF0aCBmaWxsPSIjNDM2MWVlIiBkPSJNMjQ5LjYgNDcuNjc4bC0yMDgtMjJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OHptMTEyIDMyYy03LjMwNS0uNzczLTEzLjcwNSA0LjM0MS0xNC40NzggMTEuNjQ2bC0xMCA5NWMtLjc3MyA3LjMwNSA0LjM0MSAxMy43MDUgMTEuNjQ2IDE0LjQ3OGwyMDggMjJjNy4zMDUuNzczIDEzLjcwNS00LjM0MSAxNC40NzgtMTEuNjQ2bDEwLTk1Yy43NzMtNy4zMDUtNC4zNDEtMTMuNzA1LTExLjY0Ni0xNC40NzhsLTIwOC0yMnptLTExMiAyMDBjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyem0xMTIgMzJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyeiIvPjwvc3ZnPg==">
+    <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48cGF0aCBmaWxsPSIjNDM2MWVlIiBkPSJNMjQ5LjYgNDcuNjc4bC0yMDgtMjJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OHptMTEyIDMyYy03LjMwNS0uNzczLTEzLjcwNSA0LjM0MS0xNC40NzggMTEuNjQ2bC0xMCA5NWMtLjc3MyA3LjMwNSA0LjM0MSAxMy43MDUgMTEuNjQ2IDE0LjQ3OGwyMDggMjJjNy4zMDUuNzczIDEzLjcwNS00LjM0MSAxNC40NzgtMTEuNjQ2bDEwLTk1Yy43NzMtNy4zMDUtNC4zNDEtMTMuNzA1LTExLjY0Ni0xNC40NzhsLTIwOC0yMnptLTExMiAyMDBjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyem0xMTIgMzJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyeiIvPjwvc3ZnPg==">
     <style>
         :root {
             --primary: #4361ee;
@@ -982,13 +986,14 @@ Tips:
                 .substring(0, 50);
         }
         
-        function createCompleteHtmlDocument(chapter, chapterNumber) {
-            return `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHtml(chapter.title)}</title>
+                 function createCompleteHtmlDocument(chapter, chapterNumber) {
+             return `<!DOCTYPE html>
+ <html lang="pt-BR">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>${escapeHtml(chapter.title)}</title>
+     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48cGF0aCBmaWxsPSIjNDM2MWVlIiBkPSJNMjQ5LjYgNDcuNjc4bC0yMDgtMjJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OHptMTEyIDMyYy03LjMwNS0uNzczLTEzLjcwNSA0LjM0MS0xNC40NzggMTEuNjQ2bC0xMCA5NWMtLjc3MyA3LjMwNSA0LjM0MSAxMy43MDUgMTEuNjQ2IDE0LjQ3OGwyMDggMjJjNy4zMDUuNzczIDEzLjcwNS00LjM0MSAxNC40NzgtMTEuNjQ2bDEwLTk1Yy43NzMtNy4zMDUtNC4zNDEtMTMuNzA1LTExLjY0Ni0xNC40NzhsLTIwOC0yMnptLTExMiAyMDBjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyem0xMTIgMzJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyeiIvPjwvc3ZnPg==">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1098,12 +1103,13 @@ Tips:
                 `;
             }).join('');
             
-            return `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Índice de Capítulos</title>
+                         return `<!DOCTYPE html>
+ <html lang="pt-BR">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Índice de Capítulos</title>
+     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48cGF0aCBmaWxsPSIjNDM2MWVlIiBkPSJNMjQ5LjYgNDcuNjc4bC0yMDgtMjJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OHptMTEyIDMyYy03LjMwNS0uNzczLTEzLjcwNSA0LjM0MS0xNC40NzggMTEuNjQ2bC0xMCA5NWMtLjc3MyA3LjMwNSA0LjM0MSAxMy43MDUgMTEuNjQ2IDE0LjQ3OGwyMDggMjJjNy4zMDUuNzczIDEzLjcwNS00LjM0MSAxNC40NzgtMTEuNjQ2bDEwLTk1Yy43NzMtNy4zMDUtNC4zNDEtMTMuNzA1LTExLjY0Ni0xNC40NzhsLTIwOC0yMnptLTExMiAyMDBjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyem0xMTIgMzJjLTcuMzA1LS43NzMtMTMuNzA1IDQuMzQxLTE0LjQ3OCAxMS42NDZsLTEwIDk1Yy0uNzczIDcuMzA1IDQuMzQxIDEzLjcwNSAxMS42NDYgMTQuNDc4bDIwOCAyMmM3LjMwNS43NzMgMTMuNzA1LTQuMzQxIDE0LjQ3OC0xMS42NDZsMTAtOTVjLjc3My03LjMwNS00LjM0MS0xMy43MDUtMTEuNjQ2LTE0LjQ3OGwtMjA4LTIyeiIvPjwvc3ZnPg==">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
